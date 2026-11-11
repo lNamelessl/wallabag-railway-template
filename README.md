@@ -2,7 +2,7 @@
 
 One-click, zero-prompt deployment of [wallabag](https://github.com/wallabag/wallabag) — the open-source read-it-later app (Pocket / Instapaper alternative). Save articles from the web, read them in a clean distraction-free view, tag and annotate, export to EPUB/MOBI/PDF, and read on the go with the official Android and iOS apps via the built-in REST API and RSS feeds.
 
-[![Deploy on Railway](https://railway.com/button.svg)](https://railway.app/new?github_url=https://github.com/lNamelessl/wallabag-railway-template)
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/wallabag-railway-template)
 
 ## What gets provisioned
 
@@ -79,7 +79,7 @@ One caveat: wallabag's optional "store pictures locally" setting writes to `/var
 - **Registration is disabled by default** — this deploys as a single-user instance. Invite others by creating users from the admin UI or `php bin/console fos:user:create`.
 - **Password-reset emails need SMTP**: set `SYMFONY__ENV__MAILER_DSN` (e.g. to a Railway-resident mail service) if you want them.
 - **Redis / RabbitMQ are optional** and only used by background import workers for bulk imports; they are not provisioned.
-- `SYMFONY__ENV__SECRET` regenerates on redeploys, so browser sessions reset (log in again). Saved data is unaffected.
+- If a redeploy ever rotates `SYMFONY__ENV__SECRET`, browser sessions reset (log in again). Saved data is unaffected — it all lives on the volume.
 - Deployments go active as soon as the container starts; wallabag finishes its boot work in the first minutes. Health is best checked via `GET /api/info` (public, 200 when ready).
 
 ## Existing templates disclosure
