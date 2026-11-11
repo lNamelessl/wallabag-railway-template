@@ -12,9 +12,12 @@ DATA_DIR=/var/www/wallabag/data
 MARKER="$DATA_DIR/.admin-seeded"
 CREDS="$DATA_DIR/default-creds.txt"
 
-# 1. dir prep (idempotent; upstream entrypoint mkdir/chowns data/db when the DB is missing)
+# 1. dir prep (idempotent). Railway mounts the volume root:root and php-fpm runs as
+#    "nobody", so the WHOLE data dir is handed over - the SQLite db (upstream only
+#    chowns data/db, and only when the DB file is missing) plus files wallabag writes
+#    at the data root itself (site-credentials-secret-key.txt) and data/assets.
 mkdir -p "$DATA_DIR/db" "$DATA_DIR/assets"
-chown nobody: "$DATA_DIR/db" "$DATA_DIR/assets" 2>/dev/null || true
+chown -R nobody: "$DATA_DIR" 2>/dev/null || true
 
 cd /var/www/wallabag || exit 1
 
